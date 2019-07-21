@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        ul{
+            list-style: none;
+        }
+        .showContainter{
+            width: 900px;
+            height: 400px;
+            position: relative;
+        }
+        .item{
+            opacity: 0;
+            z-index: 1;
+            transition: all 1s;
+        }
+        .list{
+            width: 100%;
+            height: 100%;
+        }
+        .itemImg{
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .goPreBtn{
+            width: 50px;
+            height: 100px;
+            position: absolute;
+            top: 150px;
+            left: 0;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 40px;
+            border-width: 0;
+        }
+        .goNextBtn{
+            width: 50px;
+            height: 100px;
+            position: absolute;
+            right: 0;
+            top: 150px;
+            border-width: 0;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 40px;
+        }
+        .goNextBtn:hover,.goPreBtn:hover{
+            background-color: #fff;
+            color: black;
+        }
+        .pointList{
+            position: absolute;
+            bottom: 10px;
+            right: 400px;
+        }
+        .pointer{
+            width: 15px;
+            height: 15px;
+            border: 1px solid white;
+            border-radius: 100%;
+            display: inline-block;
+            margin-right: 10px;
+            background-color: white;
+            color: black;
+            font-size: 10px;
+            text-align: center;
+            line-height: 15px;
+            cursor: pointer;
+            z-index: 100;
+        }
+        .item.active{
+            opacity: 1;
+            z-index: 10;
+        }
+        .pointer.active{
+            width: 20px;
+            height: 20px;
+            border:1px solid red; 
+            line-height: 20px;
+        }
+    </style>
+</head>
+<body>
+
+
+    <div class="showContainter">
+        <ul class="list">   
+            <li class="item active"><a href=""><img class="itemImg" src="image/1.jpg"></a></li>
+            <li class="item"><a href=""><img class="itemImg" src="image/2.jpg"></a></li>
+            <li class="item"><a href=""><img class="itemImg" src="image/3.jpg"></a></li>
+            <li class="item"><a href=""><img class="itemImg" src="image/4.jpg"></a></li>
+            <li class="item"><a href=""><img class="itemImg" src="image/5.jpg"></a></li>
+        </ul> 
+        <button class="goPreBtn" id="goPreBtn"><</button>
+        <button class="goNextBtn" id="goNextBtn">></button>
+        <ul class="pointList">
+            <li class="pointer active" data-index="0">1</li>
+            <li class="pointer" data-index="1">2</li>
+            <li class="pointer" data-index="2">3</li>
+            <li class="pointer" data-index="3">4</li>
+            <li class="pointer" data-index="4">5</li>
+        </ul>
+    </div>
+    <script>
+        var getItem=document.getElementsByClassName("item");
+        var getPoint=document.getElementsByClassName("pointer");
+        var goPreBtn=document.getElementById("goPreBtn");
+        var goNextBtn=document.getElementById("goNextBtn");
+        var index=0;
+        var time =0;
+
+        var clearActive=function(){
+            for(let i=0;i<getItem.length;i++){
+                getItem[i].className="item";
+                getPoint[i].className="pointer";
+            }
+        }
+
+        //下一幅图片
+        var goNext=function(){
+            if(index==4){
+                index=0;
+            }else{
+                index++;
+            }
+            clearActive();
+            getItem[index].className="item active";
+            getPoint[index].className="pointer active";
+        }
+        //上一幅图片
+        var goPre=function(){
+            if(index==0){
+                index=4;
+            }else{
+                index--;
+            }
+            clearActive();
+            getItem[index].className="item active";
+            getPoint[index].className="pointer active";
+        }
+        //添加前按钮事件
+        goPreBtn.addEventListener("click",function(){
+            goPre();
+        });
+        //添加后按钮事件
+        goNextBtn.addEventListener("click",function(){
+            goNext();
+        });
+        var clearTime=function(){
+            time=0;
+        }
+
+        var jumpIndex=function(){
+            
+            clearActive();
+            getItem[index].className="item active";
+            getPoint[index].className="pointer active";
+        }
+
+        for(let i=0;i<getPoint.length;i++){
+            getPoint[i].addEventListener("click",function(){
+                var pI=this.getAttribute("data-index");
+                //console.log(pI);
+                index=pI;
+                jumpIndex();
+                time=0;
+            });
+        }
+        setInterval(function(){
+            time++;
+            if(time==30){
+                goNext();
+                time=0;
+            }
+        },100);
+
+    </script>
+</body>
+</html>
